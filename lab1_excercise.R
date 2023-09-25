@@ -9,7 +9,7 @@ colnames(EPI_data) = column_names
 #notices that somehow there are only 164 entries but still R thinks theres 65467 entries
 # will use a purely numeric column as criteria for row removal
 # will use EPI since its mostly present
-EPI = EPI_data$		# assign to new variable. I didn't want to use the attach thing
+EPI = EPI_data$EPI		# assign to new variable. I didn't want to use the attach thing
 EPI = as.numeric(EPI)
 invalid_rows = is.na(EPI)
 filtered_EPI_data = EPI_data[!invalid_rows,]
@@ -86,3 +86,22 @@ qqplot(climate, agri)
 boxplot(climate, agri)
 # while from QQ plot it looks like both share the same distribution type
 # from box plot it is clear the two have difference mean and std (obviously)
+
+# plot qq plots between the following variables
+vars = c('EPI','ENVHEALTH','ECOSYSTEM','DALY','AIR_H','WATER_H','AIR_E','WATER_E','BIODIVERSITY')
+num_vars = length(vars)
+par(mfrow = c(num_vars,num_vars),mar=c(2,2,2,2))
+for (var1 in vars) {
+  for (var2 in vars){
+    x1 = as.numeric(filtered_EPI_data[,var1])
+    x2 = as.numeric(filtered_EPI_data[,var2])
+    if (var1 != var2){
+    qqplot(x1,x2, main=paste(var1,'vs',var2))
+    }
+    else{
+      plot(x1,x2, main = var1)
+    }
+    
+  }
+}
+
